@@ -46,7 +46,7 @@ import com.android.benchmark.ui.ListViewScrollActivity;
 import com.android.benchmark.ui.ShadowGridActivity;
 import com.android.benchmark.ui.TextScrollActivity;
 
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import java.util.ArrayList;
 import java.util.HashMap;

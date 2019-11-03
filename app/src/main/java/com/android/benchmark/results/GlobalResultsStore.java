@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.view.FrameMetrics;
 import android.widget.Toast;
 
-import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.io.FileWriter;
 import java.io.IOException;

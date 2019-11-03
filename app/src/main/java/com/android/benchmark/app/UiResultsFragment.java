@@ -31,7 +31,7 @@ import com.android.benchmark.registry.BenchmarkRegistry;
 import com.android.benchmark.results.GlobalResultsStore;
 import com.android.benchmark.results.UiBenchmarkResult;
 
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import java.io.FileWriter;
 import java.io.IOException;

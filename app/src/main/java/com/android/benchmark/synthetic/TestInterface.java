@@ -19,8 +19,8 @@ package com.android.benchmark.synthetic;
 import android.view.View;
 import android.widget.TextView;
 
-import org.apache.commons.math.stat.StatUtils;
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.StatUtils;
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import java.util.LinkedList;
 import java.util.Queue;
