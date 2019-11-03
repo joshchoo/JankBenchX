@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Benchmark</string>
+    <string name="app_name">JankBenchX</string>
 
     <string name="action_export">Export to CSV</string>
 
