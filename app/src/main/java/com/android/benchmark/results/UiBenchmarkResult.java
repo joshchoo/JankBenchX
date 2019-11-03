@@ -128,7 +128,7 @@ public class UiBenchmarkResult {
         int totalFrameCount = getTotalFrameCount();
         for (int i = 0; i < totalFrameCount; i++) {
             double totalDuration = getMetricAtIndex(i, FrameMetrics.TOTAL_DURATION);
-            if (totalDuration >= 12) {
+            if (totalDuration >= JANK_PENALTY_THRESHOLD_MS) {
                 badFramesStats.addValue(totalDuration);
             }
         }
