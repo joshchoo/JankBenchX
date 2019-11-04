@@ -369,6 +369,8 @@ public class RunLocalBenchmarksActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         switch (requestCode) {
             case R.id.benchmark_shadow_grid:
             case R.id.benchmark_list_view_scroll:
