@@ -24,6 +24,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.view.FrameMetrics;
 import android.widget.Toast;
 
+import com.android.benchmark.models.Result;
+
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.io.FileWriter;
@@ -32,6 +34,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public class GlobalResultsStore extends SQLiteOpenHelper {
     private static final int VERSION = 2;
@@ -268,6 +271,87 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
         }
 
         return results;
+    }
+
+    public int getLastRunId() {
+        int runId = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            String query = "SELECT run_id FROM " + UI_RESULTS_TABLE + " WHERE _id = (SELECT MAX(_id) FROM " + UI_RESULTS_TABLE + ")";
+            Cursor cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            runId = cursor.getInt(0);
+            cursor.close();
+        } finally {
+            db.close();
+        }
+
+        return runId;
+    }
+
+    public HashMap<String, UiBenchmarkResult> loadDetailedAggregatedResults(int runId) {
+        SQLiteDatabase db = getReadableDatabase();
+        HashMap<String, UiBenchmarkResult> testsResults = new HashMap<>();
+        try {
+            String[] columnsToQuery = new String[] {
+                    "name",
+                    "run_id",
+                    "iteration",
+                    "unknown_delay",
+                    "input",
+                    "animation",
+                    "layout",
+                    "draw",
+                    "sync",
+                    "command_issue",
+                    "swap_buffers",
+                    "total_duration",
+            };
+
+            Cursor cursor = db.query(
+                    UI_RESULTS_TABLE, columnsToQuery, "run_id=?",
+                    new String[] { Integer.toString(runId) }, null, null, "name");
+
+            double[] values = new double[columnsToQuery.length - 3];
+            while (cursor.moveToNext()) {
+                String testName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+
+                values[0] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("unknown_delay"));
+                values[1] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("input"));
+                values[2] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("animation"));
+                values[3] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("layout"));
+                values[4] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("draw"));
+                values[5] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("sync"));
+                values[6] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("command_issue"));
+                values[7] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("swap_buffers"));
+                values[8] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("total_duration"));
+                values[8] = cursor.getDouble(
+                        cursor.getColumnIndexOrThrow("total_duration"));
+
+                UiBenchmarkResult result = testsResults.get(testName);
+                if (result == null) {
+                    result = new UiBenchmarkResult(values);
+                    testsResults.put(testName, result);
+                } else {
+                    result.update(values);
+                }
+            }
+
+            cursor.close();
+        } finally {
+            db.close();
+        }
+
+        return testsResults;
     }
 
     public void exportToCsv() throws IOException {
