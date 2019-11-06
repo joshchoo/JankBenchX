@@ -18,7 +18,9 @@ package com.android.benchmark.app;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +34,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.android.benchmark.R;
+import com.android.benchmark.api.JankBenchAPI;
+import com.android.benchmark.config.Constants;
 import com.android.benchmark.registry.BenchmarkRegistry;
 import com.android.benchmark.results.GlobalResultsStore;
 
@@ -121,7 +125,39 @@ public class HomeActivity extends AppCompatActivity implements Button.OnClickLis
             }.execute();
 
             return true;
+        } else if (id == R.id.action_upload) {
+
+            new AsyncTask<Void, Void, Void>() {
+                boolean success;
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(HomeActivity.this, "Uploading results...", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    success = JankBenchAPI.uploadResults(HomeActivity.this, Constants.BASE_URL); // TODO: Change baseURL
+
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(HomeActivity.this, success ? "Upload succeeded" : "Upload failed", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }.execute();
+
+            return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

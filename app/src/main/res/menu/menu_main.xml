@@ -19,6 +19,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".app.HomeActivity">
     <item
+        android:id="@+id/action_upload"
+        android:orderInCategory="50"
+        android:title="@string/action_upload"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_export"
