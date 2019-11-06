@@ -31,8 +31,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.benchmark.R;
+import com.android.benchmark.api.JankBenchAPI;
+import com.android.benchmark.config.Constants;
 import com.android.benchmark.registry.BenchmarkGroup;
 import com.android.benchmark.registry.BenchmarkRegistry;
 import com.android.benchmark.results.GlobalResultsStore;
@@ -292,6 +295,34 @@ public class RunLocalBenchmarksActivity extends AppCompatActivity {
         } else {
             Log.i("BENCH", "BenchmarkDone!");
             computeOverallScore();
+
+            new AsyncTask<Void, Void, Void>() {
+                boolean success;
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    RunLocalBenchmarksActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RunLocalBenchmarksActivity.this, "Uploading results...", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    success = JankBenchAPI.uploadResults(RunLocalBenchmarksActivity.this, Constants.BASE_URL); // TODO: Change baseURL
+
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    RunLocalBenchmarksActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RunLocalBenchmarksActivity.this, success ? "Upload succeeded" : "Upload failed", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }.execute();
         }
     }
 
