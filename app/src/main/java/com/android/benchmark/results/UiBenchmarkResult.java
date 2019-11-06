@@ -144,6 +144,24 @@ public class UiBenchmarkResult {
                 (badFramesStats.getMean()) * jankFrameCount * badFramesStats.getStandardDeviation());
     }
 
+    public int getNumJankFrames() {
+        return getSortedJankFrameIndices().length;
+    }
+
+    public int getNumBadFrames() {
+        int num_bad_frames = 0;
+        int totalFrameCount = getTotalFrameCount();
+        for (int i = 0; i < totalFrameCount; i++) {
+            double totalDuration = getMetricAtIndex(i, FrameMetrics.TOTAL_DURATION);
+            if (totalDuration >= JANK_PENALTY_THRESHOLD_MS) {
+                num_bad_frames++;
+            }
+        }
+
+        return num_bad_frames;
+    }
+
+
     public int getJankPenalty() {
         double total95th = mStoredStatistics[getMetricPosition(FrameMetrics.TOTAL_DURATION)]
                 .getPercentile(95);
