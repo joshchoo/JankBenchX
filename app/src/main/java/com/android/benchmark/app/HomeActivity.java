@@ -40,12 +40,21 @@ import com.android.benchmark.registry.BenchmarkRegistry;
 import com.android.benchmark.results.GlobalResultsStore;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.topjohnwu.superuser.Shell;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class HomeActivity extends AppCompatActivity implements Button.OnClickListener {
+
+    static {
+        /* Shell.Config methods shall be called before any shell is created
+         * This is the why in this example we call it in a static block
+         * The followings are some examples, check Javadoc for more details */
+        Shell.Config.setFlags(Shell.FLAG_REDIRECT_STDERR);
+        Shell.Config.setTimeout(10);
+    }
 
     private FloatingActionButton mStartButton;
     private BenchmarkRegistry mRegistry;
