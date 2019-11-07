@@ -9,6 +9,7 @@ import com.android.benchmark.models.Entry;
 import com.android.benchmark.models.Result;
 import com.android.benchmark.results.GlobalResultsStore;
 import com.android.benchmark.results.UiBenchmarkResult;
+import com.android.benchmark.utils.CatFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +69,10 @@ public class JankBenchAPI {
         entry.setBuildType(Build.TYPE);
         entry.setBuildTime(String.valueOf(Build.TIME));
         entry.setFingerprint(Build.FINGERPRINT);
-        entry.setKernelVersion("Linux version 4.9.179-perf+"); // TODO: Implement 'cat /proc/version'
+
+        List<String> proc_version_contents = CatFile.read("/proc/version");
+        String kernel_version = proc_version_contents.size() == 0 ? null : proc_version_contents.get(0);
+        entry.setKernelVersion(kernel_version);
 
         List<Result> results = new ArrayList<>();
 
