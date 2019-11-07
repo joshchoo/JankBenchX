@@ -279,8 +279,9 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
         try {
             String query = "SELECT run_id FROM " + UI_RESULTS_TABLE + " WHERE _id = (SELECT MAX(_id) FROM " + UI_RESULTS_TABLE + ")";
             Cursor cursor = db.rawQuery(query, null);
-            cursor.moveToFirst();
-            runId = cursor.getInt(0);
+            if (cursor.moveToFirst()) {
+                runId = cursor.getInt(0);
+            }
             cursor.close();
         } finally {
             db.close();
