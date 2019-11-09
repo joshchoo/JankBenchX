@@ -65,7 +65,7 @@ public class JankBenchAPI {
         entry.setDeviceManufacturer(Build.MANUFACTURER);
         entry.setDeviceBrand(Build.BRAND);
         entry.setDeviceHardware(Build.HARDWARE);
-        entry.setAndroidVersion(Build.VERSION.BASE_OS);
+        entry.setAndroidVersion(Build.VERSION.RELEASE);
         entry.setBuildType(Build.TYPE);
         entry.setBuildTime(String.valueOf(Build.TIME));
         entry.setFingerprint(Build.FINGERPRINT);
