@@ -308,7 +308,7 @@ public class RunLocalBenchmarksActivity extends AppCompatActivity {
                         }
                     });
 
-                    success = JankBenchAPI.uploadResults(RunLocalBenchmarksActivity.this, Constants.BASE_URL); // TODO: Change baseURL
+                    success = JankBenchAPI.uploadResults(RunLocalBenchmarksActivity.this, Constants.BASE_URL); 
 
                     return null;
                 }

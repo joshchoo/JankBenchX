@@ -7,6 +7,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface JankBenchService {
-    @POST("api/v1/results")
+    @POST("v1/results")
     Call<Entry> uploadEntry(@Body Entry entry);
 }
