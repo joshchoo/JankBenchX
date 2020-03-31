@@ -9,7 +9,7 @@ import com.android.benchmark.models.Entry;
 import com.android.benchmark.models.Result;
 import com.android.benchmark.results.GlobalResultsStore;
 import com.android.benchmark.results.UiBenchmarkResult;
-import com.android.benchmark.utils.CatFile;
+import com.topjohnwu.superuser.Shell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,8 +70,7 @@ public class JankBenchAPI {
         entry.setBuildTime(String.valueOf(Build.TIME));
         entry.setFingerprint(Build.FINGERPRINT);
 
-        List<String> proc_version_contents = CatFile.read("/proc/version");
-        String kernel_version = proc_version_contents.size() == 0 ? null : proc_version_contents.get(0);
+        String kernel_version = getKernelVersion();
         entry.setKernelVersion(kernel_version);
 
         List<Result> results = new ArrayList<>();
@@ -99,5 +98,11 @@ public class JankBenchAPI {
         entry.setResults(results);
 
         return entry;
+    }
+
+    private static String getKernelVersion() {
+        List<String> unameOutput = Shell.sh("uname -a").exec().getOut();
+        String kernel_version = unameOutput.size() == 0 ? null : unameOutput.get(0);
+        return kernel_version;
     }
 }
