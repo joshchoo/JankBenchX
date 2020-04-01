@@ -24,8 +24,12 @@
         android:title="@string/action_upload"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_view_results"
         android:orderInCategory="100"
+        android:title="@string/action_view_results" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="101"
         android:title="@string/action_export"
         app:showAsAction="never" />
 </menu>

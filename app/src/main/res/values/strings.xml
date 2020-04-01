@@ -19,6 +19,7 @@
 
     <string name="action_export">Export to CSV</string>
     <string name="action_upload">Upload Results</string>
+    <string name="action_view_results">View Results Online</string>
 
     <string name="list_view_scroll_name">List View Fling</string>
     <string name="list_view_scroll_description">Tests list view fling performance</string>

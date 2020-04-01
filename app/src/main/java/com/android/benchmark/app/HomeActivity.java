@@ -17,6 +17,7 @@
 package com.android.benchmark.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -165,6 +166,12 @@ public class HomeActivity extends AppCompatActivity implements Button.OnClickLis
             }.execute();
 
             return true;
+        } else if (id == R.id.action_view_results) {
+            Uri webpage = Uri.parse("https://data.jankbench.tk");
+            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
         }
 
 
