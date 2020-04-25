@@ -41,6 +41,7 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
     private static GlobalResultsStore sInstance;
     private static final String UI_RESULTS_TABLE = "ui_results";
+    private static final String REFRESH_RATE_TABLE = "refresh_rates";
 
     private final Context mContext;
 
@@ -76,10 +77,15 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
                 " total_duration REAL," +
                 " jank_frame BOOLEAN, " +
                 " device_charging INTEGER);");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + REFRESH_RATE_TABLE + " (" +
+                " _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " run_id INTEGER," +
+                " refresh_rate INTEGER);");
     }
 
     public void storeRunResults(String testName, int runId, int iteration,
-                                UiBenchmarkResult result) {
+                                UiBenchmarkResult result, float refresh_rate) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
@@ -121,6 +127,13 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
                 }
                 db.insert(UI_RESULTS_TABLE, null, cv);
             }
+
+            // Store Display Refresh Rate
+            ContentValues cv = new ContentValues();
+            cv.put("run_id", runId);
+            cv.put("refresh_rate", Math.round(refresh_rate));
+            db.insert(REFRESH_RATE_TABLE, null, cv);
+
             db.setTransactionSuccessful();
             Toast.makeText(mContext, "Score: " + result.getScore()
                     + " Jank: " + (100 * sortedJankIndices.length) / (float) totalFrameCount + "%",
@@ -288,6 +301,26 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
         }
 
         return runId;
+    }
+
+    public int loadRefreshRate(int runId) {
+        int refresh_rate = -1;
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            String[] columnsToQuery = new String[] {
+                    "run_id",
+                    "refresh_rate"
+            };
+            Cursor cursor = db.query(REFRESH_RATE_TABLE, columnsToQuery, "run_id=?", new String[] { Integer.toString(runId) }, null, null, null);
+            if (cursor.moveToFirst()) {
+                refresh_rate = cursor.getInt((1));
+            }
+            cursor.close();
+        } finally {
+            db.close();
+        }
+
+        return refresh_rate;
     }
 
     public HashMap<String, UiBenchmarkResult> loadDetailedAggregatedResults(int runId) {

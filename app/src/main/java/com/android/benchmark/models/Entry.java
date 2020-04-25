@@ -51,6 +51,9 @@ public class Entry {
     @SerializedName("results")
     @Expose
     private List<Result> results = null;
+    @SerializedName("refresh_rate")
+    @Expose
+    private Integer refreshRate;
 
     public Integer getRunId() {
         return runId;
@@ -172,4 +175,11 @@ public class Entry {
         this.results = results;
     }
 
+    public int getRefreshRate() {
+        return refreshRate;
+    }
+
+    public void setRefreshRate(int refreshRate) {
+        this.refreshRate = refreshRate;
+    }
 }

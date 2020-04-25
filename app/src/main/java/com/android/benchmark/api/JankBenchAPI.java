@@ -52,6 +52,7 @@ public class JankBenchAPI {
 
     private static Entry createEntry(Context context) {
         int lastRunId = GlobalResultsStore.getInstance(context).getLastRunId();
+        int lastRunRefreshRate = GlobalResultsStore.getInstance(context).loadRefreshRate((lastRunId));
         HashMap<String, UiBenchmarkResult> resultsMap = GlobalResultsStore.getInstance(context).loadDetailedAggregatedResults(lastRunId);
 
         Entry entry = new Entry();
@@ -69,6 +70,7 @@ public class JankBenchAPI {
         entry.setBuildType(Build.TYPE);
         entry.setBuildTime(String.valueOf(Build.TIME));
         entry.setFingerprint(Build.FINGERPRINT);
+        entry.setRefreshRate(lastRunRefreshRate);
 
         String kernel_version = getKernelVersion();
         entry.setKernelVersion(kernel_version);
