@@ -30,14 +30,16 @@ import java.util.List;
  */
 @TargetApi(24)
 public class UiBenchmarkResult {
-    private static final int BASE_SCORE = 100;
-    private static final int ZERO_SCORE_TOTAL_DURATION_MS = 32;
-    private static final int JANK_PENALTY_THRESHOLD_MS = 12;
-    private static final int ZERO_SCORE_ABOVE_THRESHOLD_MS =
+    private int BASE_SCORE = 100;
+    private int CONSISTENCY_BONUS_MAX = 100;
+
+    private int FRAME_PERIOD_MS = 16;
+    private int ZERO_SCORE_TOTAL_DURATION_MS = 2 * FRAME_PERIOD_MS;
+    private int JANK_PENALTY_THRESHOLD_MS = (int) Math.floor(0.75 * FRAME_PERIOD_MS);
+    private int ZERO_SCORE_ABOVE_THRESHOLD_MS =
             ZERO_SCORE_TOTAL_DURATION_MS - JANK_PENALTY_THRESHOLD_MS;
-    private static final double JANK_PENALTY_PER_MS_ABOVE_THRESHOLD =
+    private double JANK_PENALTY_PER_MS_ABOVE_THRESHOLD =
             BASE_SCORE / (double)ZERO_SCORE_ABOVE_THRESHOLD_MS;
-    private static final int CONSISTENCY_BONUS_MAX = 100;
 
     private static final int METRIC_WAS_JANKY = -1;
 
@@ -52,18 +54,28 @@ public class UiBenchmarkResult {
             FrameMetrics.SWAP_BUFFERS_DURATION,
             FrameMetrics.TOTAL_DURATION,
     };
-    public static final int FRAME_PERIOD_MS = 16;
 
     private final DescriptiveStatistics[] mStoredStatistics;
 
-    public UiBenchmarkResult(List<FrameMetrics> instances) {
+    public UiBenchmarkResult(List<FrameMetrics> instances, int refresh_rate) {
+        initializeThresholds(refresh_rate);
         mStoredStatistics = new DescriptiveStatistics[METRICS.length];
         insertMetrics(instances);
     }
 
-    public UiBenchmarkResult(double[] values) {
+    public UiBenchmarkResult(double[] values, int refresh_rate) {
+        initializeThresholds(refresh_rate);
         mStoredStatistics = new DescriptiveStatistics[METRICS.length];
         insertValues(values);
+    }
+
+    // Dynamically set threshold values based on display refresh rate
+    private void initializeThresholds(int refresh_rate) {
+        FRAME_PERIOD_MS = Math.floorDiv(1000, refresh_rate);
+        ZERO_SCORE_TOTAL_DURATION_MS = FRAME_PERIOD_MS * 2;
+        JANK_PENALTY_THRESHOLD_MS = (int) Math.floor(0.75 * FRAME_PERIOD_MS);
+        ZERO_SCORE_ABOVE_THRESHOLD_MS = ZERO_SCORE_TOTAL_DURATION_MS - JANK_PENALTY_THRESHOLD_MS;
+        JANK_PENALTY_PER_MS_ABOVE_THRESHOLD = BASE_SCORE / (double)ZERO_SCORE_ABOVE_THRESHOLD_MS;
     }
 
     public void update(List<FrameMetrics> instances) {

@@ -191,7 +191,8 @@ public class Automator extends HandlerThread
             }
 
             if (mResults == null) {
-                mResults = new UiBenchmarkResult(stats);
+                float refresh_rate = getFrameRate(mWindow.getContext());
+                mResults = new UiBenchmarkResult(stats, (int) refresh_rate);
             } else {
                 mResults.update(stats);
             }

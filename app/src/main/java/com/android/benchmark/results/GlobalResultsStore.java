@@ -193,7 +193,8 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult iterationResult;
                 if (resultList.size() == iteration) {
-                    iterationResult = new UiBenchmarkResult(values);
+                    int refresh_rate = loadRefreshRate(runId);
+                    iterationResult = new UiBenchmarkResult(values, refresh_rate);
                     resultList.add(iteration, iterationResult);
                 } else {
                     iterationResult = resultList.get(iteration);
@@ -270,7 +271,8 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult iterationResult;
                 if (resultList.size() == iteration) {
-                    iterationResult = new UiBenchmarkResult(values);
+                    int refresh_rate = loadRefreshRate(runId);
+                    iterationResult = new UiBenchmarkResult(values, refresh_rate);
                     resultList.add(iterationResult);
                 } else {
                     iterationResult = resultList.get(iteration);
@@ -373,7 +375,8 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult result = testsResults.get(testName);
                 if (result == null) {
-                    result = new UiBenchmarkResult(values);
+                    int refresh_rate = loadRefreshRate(runId);
+                    result = new UiBenchmarkResult(values, refresh_rate);
                     testsResults.put(testName, result);
                 } else {
                     result.update(values);
