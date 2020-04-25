@@ -1,6 +1,8 @@
 package com.android.benchmark.api;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.view.FrameMetrics;
 
@@ -52,7 +54,13 @@ public class JankBenchAPI {
 
     private static Entry createEntry(Context context) {
         int lastRunId = GlobalResultsStore.getInstance(context).getLastRunId();
-        int lastRunRefreshRate = GlobalResultsStore.getInstance(context).loadRefreshRate((lastRunId));
+        SQLiteDatabase db = GlobalResultsStore.getInstance(context).getReadableDatabase();
+        int lastRunRefreshRate;
+        try {
+            lastRunRefreshRate = GlobalResultsStore.getInstance(context).loadRefreshRate(lastRunId, db);
+        } finally {
+            db.close();
+        }
         HashMap<String, UiBenchmarkResult> resultsMap = GlobalResultsStore.getInstance(context).loadDetailedAggregatedResults(lastRunId);
 
         Entry entry = new Entry();

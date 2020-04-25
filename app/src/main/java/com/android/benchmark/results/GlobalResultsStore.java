@@ -193,7 +193,7 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult iterationResult;
                 if (resultList.size() == iteration) {
-                    int refresh_rate = loadRefreshRate(runId);
+                    int refresh_rate = loadRefreshRate(runId, db);
                     iterationResult = new UiBenchmarkResult(values, refresh_rate);
                     resultList.add(iteration, iterationResult);
                 } else {
@@ -271,7 +271,7 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult iterationResult;
                 if (resultList.size() == iteration) {
-                    int refresh_rate = loadRefreshRate(runId);
+                    int refresh_rate = loadRefreshRate(runId, db);
                     iterationResult = new UiBenchmarkResult(values, refresh_rate);
                     resultList.add(iterationResult);
                 } else {
@@ -305,9 +305,9 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
         return runId;
     }
 
-    public int loadRefreshRate(int runId) {
+    public int loadRefreshRate(int runId, SQLiteDatabase db) {
         int refresh_rate = -1;
-        SQLiteDatabase db = getReadableDatabase();
+
         try {
             String[] columnsToQuery = new String[] {
                     "run_id",
@@ -319,7 +319,6 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
             }
             cursor.close();
         } finally {
-            db.close();
         }
 
         return refresh_rate;
@@ -375,7 +374,7 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult result = testsResults.get(testName);
                 if (result == null) {
-                    int refresh_rate = loadRefreshRate(runId);
+                    int refresh_rate = loadRefreshRate(runId, db);
                     result = new UiBenchmarkResult(values, refresh_rate);
                     testsResults.put(testName, result);
                 } else {
