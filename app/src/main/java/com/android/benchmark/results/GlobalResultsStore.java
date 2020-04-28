@@ -41,6 +41,7 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
     private static GlobalResultsStore sInstance;
     private static final String UI_RESULTS_TABLE = "ui_results";
+    private static final String REFRESH_RATE_TABLE = "refresh_rates";
 
     private final Context mContext;
 
@@ -76,10 +77,15 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
                 " total_duration REAL," +
                 " jank_frame BOOLEAN, " +
                 " device_charging INTEGER);");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + REFRESH_RATE_TABLE + " (" +
+                " _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " run_id INTEGER," +
+                " refresh_rate INTEGER);");
     }
 
     public void storeRunResults(String testName, int runId, int iteration,
-                                UiBenchmarkResult result) {
+                                UiBenchmarkResult result, float refresh_rate) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
@@ -121,6 +127,13 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
                 }
                 db.insert(UI_RESULTS_TABLE, null, cv);
             }
+
+            // Store Display Refresh Rate
+            ContentValues cv = new ContentValues();
+            cv.put("run_id", runId);
+            cv.put("refresh_rate", Math.round(refresh_rate));
+            db.insert(REFRESH_RATE_TABLE, null, cv);
+
             db.setTransactionSuccessful();
             Toast.makeText(mContext, "Score: " + result.getScore()
                     + " Jank: " + (100 * sortedJankIndices.length) / (float) totalFrameCount + "%",
@@ -180,7 +193,8 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult iterationResult;
                 if (resultList.size() == iteration) {
-                    iterationResult = new UiBenchmarkResult(values);
+                    int refresh_rate = loadRefreshRate(runId, db);
+                    iterationResult = new UiBenchmarkResult(values, refresh_rate);
                     resultList.add(iteration, iterationResult);
                 } else {
                     iterationResult = resultList.get(iteration);
@@ -257,7 +271,8 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult iterationResult;
                 if (resultList.size() == iteration) {
-                    iterationResult = new UiBenchmarkResult(values);
+                    int refresh_rate = loadRefreshRate(runId, db);
+                    iterationResult = new UiBenchmarkResult(values, refresh_rate);
                     resultList.add(iterationResult);
                 } else {
                     iterationResult = resultList.get(iteration);
@@ -288,6 +303,25 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
         }
 
         return runId;
+    }
+
+    public int loadRefreshRate(int runId, SQLiteDatabase db) {
+        int refresh_rate = -1;
+
+        try {
+            String[] columnsToQuery = new String[] {
+                    "run_id",
+                    "refresh_rate"
+            };
+            Cursor cursor = db.query(REFRESH_RATE_TABLE, columnsToQuery, "run_id=?", new String[] { Integer.toString(runId) }, null, null, null);
+            if (cursor.moveToFirst()) {
+                refresh_rate = cursor.getInt((1));
+            }
+            cursor.close();
+        } finally {
+        }
+
+        return refresh_rate;
     }
 
     public HashMap<String, UiBenchmarkResult> loadDetailedAggregatedResults(int runId) {
@@ -340,7 +374,8 @@ public class GlobalResultsStore extends SQLiteOpenHelper {
 
                 UiBenchmarkResult result = testsResults.get(testName);
                 if (result == null) {
-                    result = new UiBenchmarkResult(values);
+                    int refresh_rate = loadRefreshRate(runId, db);
+                    result = new UiBenchmarkResult(values, refresh_rate);
                     testsResults.put(testName, result);
                 } else {
                     result.update(values);

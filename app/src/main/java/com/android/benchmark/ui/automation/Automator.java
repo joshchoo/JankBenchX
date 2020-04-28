@@ -18,10 +18,13 @@ package com.android.benchmark.ui.automation;
 
 import android.annotation.TargetApi;
 import android.app.Instrumentation;
+import android.content.Context;
+import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Display;
 import android.view.FrameMetrics;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
@@ -188,16 +191,25 @@ public class Automator extends HandlerThread
             }
 
             if (mResults == null) {
-                mResults = new UiBenchmarkResult(stats);
+                float refresh_rate = getFrameRate(mWindow.getContext());
+                mResults = new UiBenchmarkResult(stats, (int) refresh_rate);
             } else {
                 mResults.update(stats);
             }
         }
 
         private void writeResults() {
+            float refresh_rate = getFrameRate(mWindow.getContext());
+
             GlobalResultsStore.getInstance(mWindow.getContext())
-                    .storeRunResults(mTestName, mRunId, mIteration, mResults);
+                    .storeRunResults(mTestName, mRunId, mIteration, mResults, refresh_rate);
         }
+    }
+
+    private static float getFrameRate(Context context) {
+        final DisplayManager displayManager = context.getSystemService(DisplayManager.class);
+        Display display = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+        return display.getRefreshRate();
     }
 
     private void initHandler() {
