@@ -29,9 +29,6 @@ public class Result {
     @SerializedName("ms_avg")
     @Expose
     private Double msAvg;
-    @SerializedName("ms_0th_pctl")
-    @Expose
-    private Double ms0thPctl;
     @SerializedName("ms_10th_pctl")
     @Expose
     private Double ms10thPctl;
@@ -128,14 +125,6 @@ public class Result {
 
     public void setMsAvg(Double msAvg) {
         this.msAvg = msAvg;
-    }
-
-    public Double getMs0thPctl() {
-        return ms0thPctl;
-    }
-
-    public void setMs0thPctl(Double ms0thPctl) {
-        this.ms0thPctl = ms0thPctl;
     }
 
     public Double getMs10thPctl() {
