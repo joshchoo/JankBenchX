@@ -98,6 +98,15 @@ public class JankBenchAPI {
             result.setBadFramePct(100 * uiResult.getNumBadFrames() / (double) uiResult.getTotalFrameCount());
             result.setTotalFrames(uiResult.getTotalFrameCount());
             result.setMsAvg(uiResult.getAverage(FrameMetrics.TOTAL_DURATION));
+            result.setMs0thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 0));
+            result.setMs10thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 10));
+            result.setMs20thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 20));
+            result.setMs30thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 30));
+            result.setMs40thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 40));
+            result.setMs50thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 50));
+            result.setMs60thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 60));
+            result.setMs70thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 70));
+            result.setMs80thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 80));
             result.setMs90thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 90));
             result.setMs95thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 95));
             result.setMs99thPctl(uiResult.getPercentile(FrameMetrics.TOTAL_DURATION, 99));

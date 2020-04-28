@@ -29,6 +29,33 @@ public class Result {
     @SerializedName("ms_avg")
     @Expose
     private Double msAvg;
+    @SerializedName("ms_0th_pctl")
+    @Expose
+    private Double ms0thPctl;
+    @SerializedName("ms_10th_pctl")
+    @Expose
+    private Double ms10thPctl;
+    @SerializedName("ms_20th_pctl")
+    @Expose
+    private Double ms20thPctl;
+    @SerializedName("ms_30th_pctl")
+    @Expose
+    private Double ms30thPctl;
+    @SerializedName("ms_40th_pctl")
+    @Expose
+    private Double ms40thPctl;
+    @SerializedName("ms_50th_pctl")
+    @Expose
+    private Double ms50thPctl;
+    @SerializedName("ms_60th_pctl")
+    @Expose
+    private Double ms60thPctl;
+    @SerializedName("ms_70th_pctl")
+    @Expose
+    private Double ms70thPctl;
+    @SerializedName("ms_80th_pctl")
+    @Expose
+    private Double ms80thPctl;
     @SerializedName("ms_90th_pctl")
     @Expose
     private Double ms90thPctl;
@@ -101,6 +128,78 @@ public class Result {
 
     public void setMsAvg(Double msAvg) {
         this.msAvg = msAvg;
+    }
+
+    public Double getMs0thPctl() {
+        return ms0thPctl;
+    }
+
+    public void setMs0thPctl(Double ms0thPctl) {
+        this.ms0thPctl = ms0thPctl;
+    }
+
+    public Double getMs10thPctl() {
+        return ms10thPctl;
+    }
+
+    public void setMs10thPctl(Double ms10thPctl) {
+        this.ms10thPctl = ms10thPctl;
+    }
+
+    public Double getMs20thPctl() {
+        return ms20thPctl;
+    }
+
+    public void setMs20thPctl(Double ms20thPctl) {
+        this.ms20thPctl = ms20thPctl;
+    }
+
+    public Double getMs30thPctl() {
+        return ms30thPctl;
+    }
+
+    public void setMs30thPctl(Double ms30thPctl) {
+        this.ms30thPctl = ms30thPctl;
+    }
+
+    public Double getMs40thPctl() {
+        return ms40thPctl;
+    }
+
+    public void setMs40thPctl(Double ms40thPctl) {
+        this.ms40thPctl = ms40thPctl;
+    }
+
+    public Double getMs50thPctl() {
+        return ms50thPctl;
+    }
+
+    public void setMs50thPctl(Double ms50thPctl) {
+        this.ms50thPctl = ms50thPctl;
+    }
+
+    public Double getMs60thPctl() {
+        return ms60thPctl;
+    }
+
+    public void setMs60thPctl(Double ms60thPctl) {
+        this.ms60thPctl = ms60thPctl;
+    }
+
+    public Double getMs70thPctl() {
+        return ms70thPctl;
+    }
+
+    public void setMs70thPctl(Double ms70thPctl) {
+        this.ms70thPctl = ms70thPctl;
+    }
+
+    public Double getMs80thPctl() {
+        return ms80thPctl;
+    }
+
+    public void setMs80thPctl(Double ms80thPctl) {
+        this.ms80thPctl = ms80thPctl;
     }
 
     public Double getMs90thPctl() {
