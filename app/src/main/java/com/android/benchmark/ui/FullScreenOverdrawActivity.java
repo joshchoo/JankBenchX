@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import androidx.annotation.Keep;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -45,6 +47,7 @@ public class FullScreenOverdrawActivity extends AppCompatActivity {
             super(context);
         }
 
+        @Keep
         @SuppressWarnings("unused")
         public void setColorValue(int colorValue) {
             mColorValue = colorValue;
