@@ -167,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements Button.OnClickLis
 
             return true;
         } else if (id == R.id.action_view_results) {
-            Uri webpage = Uri.parse("https://jankbenchx.now.sh");
+            Uri webpage = Uri.parse("https://jankbenchx.vercel.app");
             Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
