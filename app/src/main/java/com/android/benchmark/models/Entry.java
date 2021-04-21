@@ -4,6 +4,9 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class Entry {
 
     @SerializedName("run_id")

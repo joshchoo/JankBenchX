@@ -3,6 +3,9 @@ package com.android.benchmark.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class Result {
 
     @SerializedName("test_name")
